@@ -1,0 +1,39 @@
+{% extends 'homepage/base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+    {% if user.is_authenticated %}
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <div class="card-body text-center py-5">
+                    <h1 class="card-title mb-4">
+                        <span class="text-primary">Привіт, {{ user.first_name|default:user.username }}! 👋</span>
+                    </h1>
+                    <p class="card-text lead text-muted">
+                        Ласкаво просимо до ValoNet
+                    </p>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <div class="card-body text-center py-5">
+                    <h1 class="card-title mb-4">Ласкаво просимо до ValoNet</h1>
+                    <p class="card-text lead text-muted mb-4">
+                        Будь ласка, увійдіть або зареєструйтесь, щоб продовжити
+                    </p>
+                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg me-2">Увійти</a>
+                    <a href="{% url 'register' %}" class="btn btn-success btn-lg">Зареєструватися</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

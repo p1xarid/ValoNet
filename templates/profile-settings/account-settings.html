@@ -1,0 +1,64 @@
+{% extends "homepage/base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'some/settings.css' %}">
+{% endblock %}
+
+{% block body_class %}settings-page{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="card shadow-lg p-4 rounded-4" style="background-color: rgb(171, 181, 228);">
+
+                <h2 class="text-center mb-4">Account settings</h2>
+
+                <form method="post" class="mb-4">
+                    {% csrf_token %}
+                    <h6>Username</h6>
+                    {{ username_form.username }}
+                    <button name="change_username" class="btn btn-primary btn-sm mt-2">
+                        Змінити username
+                    </button>
+                </form>
+
+                <hr>
+
+                <form method="post" class="mb-4">
+                    {% csrf_token %}
+                    <h6>Email</h6>
+                    {{ email_form.email }}
+                    <button name="change_email" class="btn btn-primary btn-sm mt-2">
+                        Змінити email
+                    </button>
+                </form>
+
+                <hr>
+
+                <form method="post" class="mb-4">
+                    {% csrf_token %}
+                    <h6>Пароль</h6>
+                    {{ password_form.as_p }}
+                    <button name="change_password" class="btn btn-warning btn-sm">
+                        Змінити пароль
+                    </button>
+                </form>
+
+                <hr>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <button name="delete_account" class="btn btn-danger btn-sm"
+                        onclick="return confirm('Точно видалити акаунт?')">
+                        Видалити акаунт
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,4 @@
+body.profile-page {
+    background: radial-gradient(circle, rgb(53, 86, 155), rgb(41, 65, 117), rgb(29, 44, 79));
+    min-height: 100vh;
+}
