@@ -43,6 +43,15 @@
                         <p><strong>Username:</strong> {{ user.username }}</p>
                         <p><strong>Password:</strong> ••••••••</p>
                         <p><strong>Email:</strong> {{ user.email }}</p>
+                        <h4 class="mt-4">Про себе:</h4>
+                        <form method="post" class="mb-3">
+                            {% csrf_token %}
+                            <div class="input-group mb-2">
+                                <input type="text" name="bio" class="form-control" placeholder="Короткий опис..."
+                                    value="{{ profile.bio|default:'' }}">
+                                <button type="submit" name="update_bio" class="btn btn-primary">Зберегти</button>
+                            </div>
+                        </form>
                         <p><strong>Дата реєстрації:</strong>
                             {{ user.date_joined|date:"d.m.Y" }}
                         </p>

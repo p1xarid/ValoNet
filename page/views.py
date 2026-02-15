@@ -1,27 +1,62 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect , get_object_or_404
 from django.contrib.auth.decorators import login_required
-from requests import request
+from requests import post, request
 from .forms import EmailChangeForm, UsernameChangeForm
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.models import User
-from .models import SocialLink, Post
+from .models import Attachment, SocialLink, Post
 from .forms import SocialLinkForm
 
 
+
 def homepage_view(request):
-    return render(request, "homepage/homepage.html")
+    posts = Post.objects.all().order_by("-created_at")
+    return render(request, "homepage/homepage.html", {"posts": posts})
 
 
 @login_required
-def profile_view(request):
+def my_profile_view(request):
     social_links = SocialLink.objects.filter(user=request.user)
     posts = Post.objects.filter(author=request.user).order_by("-created_at")
 
+    if request.method == "POST":
+        if "delete_post" in request.POST:
+            post_id = request.POST.get("post_id")
+            Post.objects.filter(id=post_id, author=request.user).delete()
+            return redirect("my_profile")
+
+        elif "create_post" in request.POST:
+            title = request.POST.get("title")
+            content = request.POST.get("content")
+            files = request.FILES.getlist("attachments")
+
+
+            if title and content:
+                post = Post.objects.create(title=title, content=content, author=request.user)
+                
+                for file in files:
+                    Attachment.objects.create(post=post, file=file)
+
+                return redirect("my_profile")
+
+        
     return render(
         request,
         "profile-settings/profile.html",
         {"social_links": social_links, "posts": posts},
+    )
+
+@login_required
+def profile_view(request, username):
+    user = get_object_or_404(User, username=username)
+    social_links = SocialLink.objects.filter(user=user)
+    posts = Post.objects.filter(author=user).order_by("-created_at")
+
+    return render(
+        request,
+        "profile-settings/profile.html",
+        {"user": user, "social_links": social_links, "posts": posts},
     )
 
 
@@ -38,6 +73,11 @@ def settings_view(request):
 
         if "avatar" in request.FILES:
             profile.avatar = request.FILES["avatar"]
+            profile.save()
+            return redirect("settings")
+        
+        if "update_bio" in request.POST:
+            profile.bio = request.POST.get("bio", "")
             profile.save()
             return redirect("settings")
 

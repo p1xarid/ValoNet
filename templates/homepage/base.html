@@ -21,9 +21,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    {% if user.profile.avatar %}
+                    {% if request.user.profile.avatar %}
 
-                    <img src="{{ user.profile.avatar_url }}" alt="Profile Picture" class="rounded-circle" width="40"
+                    <img src="{{ request.user.profile.avatar_url }}" alt="Profile Picture" class="rounded-circle" width="40"
                         height="40" style="object-fit: cover;">
 
                     {% else %}
@@ -37,10 +37,10 @@
                     <li class="nav-item dropdown" data-bs-theme="dark">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            {{ user.username }}
+                            {{ request.user.username }}
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'my_profile' %}">Profile</a></li>
                             <li><a class="dropdown-item" href="{% url 'settings' %}">Settings</a></li>
                             <li>
                                 <hr class="dropdown-divider">
